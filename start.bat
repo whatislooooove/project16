@@ -1,0 +1,1 @@
+hlds.exe -console -condebug -debug -game cstrike +maxplayers 16 +map de_dust2

@@ -1,0 +1,47 @@
+# --- Корень сервера ---
+/steamcmd/
+/hlds*
+/swds.dll
+*.dll
+*.so
+*.exe
+*.pdb
+*.log
+/qconsole.log
+/logs/
+/config/
+/HLTV-Readme.txt
+/hltv.cfg
+/hltv.pdb
+/platform/
+/valve/
+# /steam_appid.txt   # раскомментируйте, если хотите игнорировать
+
+# --- cstrike: стандартный контент ---
+/cstrike/maps/
+/cstrike/models/
+/cstrike/sound/
+/cstrike/sprites/
+/cstrike/overviews/
+/cstrike/gfx/
+/cstrike/resource/
+/cstrike/events/
+/cstrike/dlls/
+/cstrike/cl_dlls/
+/cstrike/*.pak
+/cstrike/*.wad
+/cstrike/*.log
+/cstrike/logs/
+
+# --- AMX Mod X: логи и кэш ---
+/cstrike/addons/amxmodx/logs/
+/cstrike/addons/amxmodx/data/*
+!/cstrike/addons/amxmodx/data/lang/
+!/cstrike/addons/amxmodx/data/lang/*.txt
+
+# --- Бинарники плагинов (если компилируете .sma сами) ---
+/cstrike/addons/amxmodx/plugins/*.amxx
+/cstrike/addons/reunion/*.dll
+/cstrike/addons/reunion/*.so
+/cstrike/addons/metamod/*.dll
+/cstrike/addons/metamod/*.so
