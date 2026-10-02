@@ -58,8 +58,8 @@ RUN ./steamcmd.sh +runscript /opt/steamcmd/hlds.install \
 COPY --chown=steam:steam scripts/install-mods.sh /opt/steamcmd/install-mods.sh
 RUN chmod +x /opt/steamcmd/install-mods.sh && /opt/steamcmd/install-mods.sh
 
-# Project overlay: configs, AMXX plugins, YaPB graphs — Windows binaries stay out via .dockerignore
-COPY --chown=steam:steam ../server/cstrike /opt/hlds/cstrike
+# Project overlay from server/ (additional compose context). Windows binaries stay out via server/.dockerignore
+COPY --chown=steam:steam --from=server cstrike /opt/hlds/cstrike
 
 USER root
 COPY scripts/entrypoint.sh /usr/local/bin/cs16-entrypoint

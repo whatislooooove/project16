@@ -1,36 +1,45 @@
 # CS 1.6 dedicated server (Linux ReHLDS inside the container).
-# Windows hlds.exe stays for local play; Docker is the portable cloud path.
+# Game files live in server/cstrike; image build lives in docker/.
 #
-# First start (build downloads Steam HLDS + ReHLDS stack, 10–20 min):
-#   docker compose up --build -d
-# Logs:
+# Setup:
+#   copy server\.env.example server\.env
+# First start (SteamCMD + ReHLDS, 10–20 min):
+#   docker compose --env-file server/.env up --build -d
+# Logs / stop:
 #   docker compose logs -f
-# Stop:
 #   docker compose down
 
 services:
   cs16:
-    build: .
+    build:
+      context: ./docker
+      dockerfile: Dockerfile
+      additional_contexts:
+        server: ./server
     image: cs16-server:local
     container_name: cs16
     platform: linux/amd64
     restart: unless-stopped
     stdin_open: true
     tty: true
+    env_file:
+      - path: .env.example
+        required: true
+      - path: ./server/.env
+        required: false
     ports:
       - "${PORT:-27015}:27015/udp"
       - "${PORT:-27015}:27015/tcp"
     environment:
       CS_HOSTNAME: ${CS_HOSTNAME:-Counter-Strike 1.6 Server}
-      MAXPLAYERS: ${MAXPLAYERS:-16}
+      MAXPLAYERS: ${MAXPLAYERS:-32}
       START_MAP: ${START_MAP:-de_dust2}
       PORT: ${PORT:-27015}
       RCON_PASSWORD: ${RCON_PASSWORD:-}
       SV_PASSWORD: ${SV_PASSWORD:-}
       CPU_MHZ: ${CPU_MHZ:-2300}
     volumes:
-      # Live overlay of your repo cstrike (dll/exe are skipped by entrypoint)
-      - ./cstrike:/custom:ro
+      - ./server/cstrike:/custom:ro
       - cs16-logs:/opt/hlds/cstrike/logs
       - cs16-amxx-logs:/opt/hlds/cstrike/addons/amxmodx/logs
     logging:
