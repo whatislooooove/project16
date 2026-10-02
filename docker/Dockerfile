@@ -36,34 +36,45 @@ RUN dpkg --add-architecture i386 \
     && locale-gen \
     && rm -rf /var/lib/apt/lists/*
 
-RUN groupadd -r steam && useradd -r -g steam -m -d /opt/steam steam \
+RUN groupadd -r steam \
+    && useradd -r -g steam -m -d /opt/steam steam \
     && mkdir -p /opt/steamcmd /opt/hlds /custom \
     && chown -R steam:steam /opt/steam /opt/steamcmd /opt/hlds /custom
 
 USER steam
 WORKDIR /opt/steamcmd
 
+# SteamCMD + стандартный Steam runtime path
 RUN curl -fsSL https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz | tar -xz \
     && mkdir -p /opt/steam/.steam \
     && ln -s /opt/steamcmd/linux32 /opt/steam/.steam/sdk32
 
 COPY --chown=steam:steam scripts/hlds.install /opt/steamcmd/hlds.install
 
-# SteamCMD app 90 often needs a second pass before cstrike files appear.
+# Устанавливаем legacy HLDS.
+# ReHLDS требует старую Steam-версию HLDS.
 RUN ./steamcmd.sh +runscript /opt/steamcmd/hlds.install \
-    && ./steamcmd.sh +runscript /opt/steamcmd/hlds.install \
     && test -x /opt/hlds/hlds_run \
-    && ln -sf /opt/steamcmd/linux32/steamclient.so /opt/hlds/steamclient.so
+    && test -d /opt/hlds/cstrike
 
 COPY --chown=steam:steam scripts/install-mods.sh /opt/steamcmd/install-mods.sh
-RUN chmod +x /opt/steamcmd/install-mods.sh && /opt/steamcmd/install-mods.sh
 
-# Project overlay from server/ (additional compose context). Windows binaries stay out via server/.dockerignore
+RUN chmod +x /opt/steamcmd/install-mods.sh \
+    && /opt/steamcmd/install-mods.sh
+
+# Project overlay from server/ (additional compose context).
+# Windows binaries stay out via server/.dockerignore.
 COPY --chown=steam:steam --from=server cstrike /opt/hlds/cstrike
 
 USER root
+
 COPY scripts/entrypoint.sh /usr/local/bin/cs16-entrypoint
-RUN chmod +x /usr/local/bin/cs16-entrypoint /opt/steamcmd/install-mods.sh \
+
+RUN chmod +x \
+        /usr/local/bin/cs16-entrypoint \
+        /opt/steamcmd/install-mods.sh \
+        /opt/hlds/hlds_linux \
+        /opt/hlds/hlds_run \
     && chown -R steam:steam /opt/hlds \
     && sed -i 's|^gamedll_linux.*|gamedll_linux "addons/metamod/metamod_i386.so"|' /opt/hlds/cstrike/liblist.gam
 

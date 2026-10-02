@@ -15,7 +15,11 @@ download() {
 # ReHLDS
 download "$REHLDS_URL" "$TMP/rehlds.zip"
 unzip -qo "$TMP/rehlds.zip" -d "$TMP/rehlds"
-cp -a "$TMP/rehlds/bin/linux32/." "$HLDS/"
+
+cp -a "$TMP/rehlds/bin/linux32/engine_i486.so" "$HLDS/engine_i486.so"
+chmod +x "$HLDS/engine_i486.so"
+
+test -f "$HLDS/engine_i486.so"
 
 # Metamod-R
 download "$METAMOD_URL" "$TMP/metamod.zip"

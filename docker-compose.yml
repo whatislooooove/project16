@@ -19,7 +19,7 @@ services:
     image: cs16-server:local
     container_name: cs16
     platform: linux/amd64
-    restart: unless-stopped
+    restart: no
     stdin_open: true
     tty: true
     env_file:
