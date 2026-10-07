@@ -1,0 +1,5 @@
+[en]
+TAKEOVER_HINT = Press [%s] to take over a bot
+TAKEOVER_DONE = [Takeover] You took over BOT %s
+TAKEOVER_NO_BOTS = [Takeover] No teammate bots available to take over
+TAKEOVER_NEED_DEAD = [Takeover] You must be dead to take over a bot
