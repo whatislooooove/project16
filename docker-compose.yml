@@ -40,6 +40,7 @@ services:
       CPU_MHZ: ${CPU_MHZ:-2300}
     volumes:
       - ./server/cstrike:/custom:ro
+      - ./users.ini:/run/secrets/users.ini:ro
       - cs16-logs:/opt/hlds/cstrike/logs
       - cs16-amxx-logs:/opt/hlds/cstrike/addons/amxmodx/logs
     logging:

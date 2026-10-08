@@ -30,6 +30,16 @@ if [ -d "$CUSTOM" ]; then
     "$CUSTOM"/ "$HLDS/cstrike"/
 fi
 
+USERS_SOURCE="/run/secrets/users.ini"
+USERS_TARGET="$HLDS/cstrike/addons/amxmodx/configs/users.ini"
+
+if [ -f "$USERS_SOURCE" ]; then
+  mkdir -p "$(dirname "$USERS_TARGET")"
+  cp "$USERS_SOURCE" "$USERS_TARGET"
+else
+  echo "WARNING: $USERS_SOURCE not found; existing users.ini will be used."
+fi
+
 overlay_dir /custom-maps "$HLDS/cstrike/maps"
 overlay_dir /custom-models "$HLDS/cstrike/models"
 overlay_dir /custom-sound "$HLDS/cstrike/sound"
@@ -53,7 +63,7 @@ done
 touch "$HLDS/cstrike/listip.cfg" "$HLDS/cstrike/banned.cfg"
 
 MAP="${START_MAP:-de_dust2}"
-MAX="${MAXPLAYERS:-16}"
+MAX="${MAXPLAYERS:-32}"
 PORT="${PORT:-27015}"
 
 extra=()
