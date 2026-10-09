@@ -44,7 +44,7 @@
 !/cstrike/addons/amxmodx/data/lang/*.txt
 
 # --- Бинарники плагинов (если компилируете .sma сами) ---
-/cstrike/addons/amxmodx/plugins/*.amxx
+#/cstrike/addons/amxmodx/plugins/*.amxx - верну, когда начну компилировать исходники во время сборки контейнера
 /cstrike/addons/reunion/*.dll
 /cstrike/addons/reunion/*.so
 /cstrike/addons/metamod/*.dll
